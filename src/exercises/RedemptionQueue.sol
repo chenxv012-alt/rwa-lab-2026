@@ -95,7 +95,7 @@ contract RedemptionQueue is AccessControl {
     ///         8-decimal NAV
     /// @dev The product carries 18 + 8 = 26 decimals and you want 6 — divide by 10 to the what?
     function assetsAtNav(uint256 shares, uint256 nav) public pure returns (uint256) {
-        revert("TODO Ex5.1: assetsAtNav");
+        return shares * nav / DECIMALS_SCALE;
     }
 
     // ==================================================================
@@ -112,7 +112,27 @@ contract RedemptionQueue is AccessControl {
     ///      Locking the rate now is the point: the payout must not drift with the NAV while
     ///      the ticket waits in the queue.
     function enqueue(uint256 shares) external returns (uint256 id) {
-        revert("TODO Ex5.2: enqueue");
+        if (shares == 0) revert ZeroAmount();
+
+        IERC20(address(tBill)).safeTransferFrom(msg.sender, address(this), shares);
+
+        uint256 nav = vault.navPerShare();
+        uint256 assets = assetsAtNav(shares, nav);
+
+        id = requests.length;
+        requests.push(
+            Request({
+                owner: msg.sender,
+                shares: shares,
+                assetsLocked: assets,
+                settled: false
+            })
+        );
+
+        pendingShares += shares;
+        pendingAssets += assets;
+
+        emit RedeemRequested(id, msg.sender, shares, assets);
     }
 
     // ==================================================================
@@ -132,7 +152,34 @@ contract RedemptionQueue is AccessControl {
     ///        - credit the owner's claimable balance and totalClaimable
     ///      Return how much you actually paid out.
     function settle(uint256 assets) external onlyRole(SETTLER_ROLE) returns (uint256 filled) {
-        revert("TODO Ex5.3: settle");
+        uint256 remaining = assets;
+
+        while (head < requests.length) {
+            uint256 id = head;
+            Request storage ticket = requests[id];
+            uint256 payout = ticket.assetsLocked;
+            
+            // Tickets are all-or-nothing: never skip an unpaid head ticket.
+            if (payout > remaining) break;
+
+            // Let the vault revert if its actual cash reserves are insufficient.
+            vault.releaseReserves(address(this), payout);
+
+            ticket.settled = true;
+            head = id + 1;
+
+            tBill.burn(address(this), ticket.shares);
+            pendingShares -= ticket.shares;
+            pendingAssets -= payout;
+
+            claimable[ticket.owner] += payout;
+            totalClaimable += payout;
+
+            remaining -= payout;
+            filled += payout;
+
+            emit Settled(id, ticket.owner, payout);
+        }
     }
 
     // ==================================================================
