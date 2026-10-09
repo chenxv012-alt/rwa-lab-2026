@@ -158,9 +158,11 @@ queue is; the custodian must recognize the vault. Skip any one and the loop reve
 **not** require a testnet. The acceptance command for every exercise is `make exercise` — green when
 you are done.
 
-**Tier 2 (bonus)** — deploy to Sepolia and verify the source on Etherscan; put the three addresses
-and their Etherscan links in your `README.md`, under a `## Deployment (Sepolia)` heading. The
-commands are Lab 1's `README.md` §4, under "Tier 2 (bonus)" — the flow is identical.
+**Tier 2 (bonus)** — deploy to Sepolia and verify the source on Etherscan; put **all seven**
+addresses and their Etherscan links in your `README.md`, under a `## Deployment (Sepolia)` heading.
+The deploy prints them in this order: `MockUSDC`, `ComplianceRegistry`, `MockPriceFeed`,
+`TBillToken`, `MockTBillCustodian`, `TBillVault`, `RedemptionQueue`. The commands are Lab 1's
+`README.md` §4, under "Tier 2 (bonus)" — the flow is identical.
 
 **Tier 3 (challenge, optional)** — **Ex7**: `make challenge` (`test/challenges/FalseNav.t.sol`). The
 reporter's number is the chain's only window onto the asset; show what happens when it lies, and
