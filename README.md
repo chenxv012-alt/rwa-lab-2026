@@ -222,3 +222,21 @@ What the zip must contain:
 
 The discussion prompts live in `STUDENT-QUESTIONS.md` — one per plank, no standard answers, and the
 real point of this lab.
+
+## Deployment (Sepolia)
+
+Deployed on Ethereum Sepolia (chain ID 11155111).
+
+- MockUSDC: [0xd244B5466119aB7CB405ED9C1163460db0fa074a](https://sepolia.etherscan.io/address/0xd244B5466119aB7CB405ED9C1163460db0fa074a)
+
+- ComplianceRegistry: [0x356BE3B344729A25d6271394B3E6a32B6E1dB98c](https://sepolia.etherscan.io/address/0x356BE3B344729A25d6271394B3E6a32B6E1dB98c)
+
+- MockPriceFeed: [0x65Ec786f35C0115B43746c42F9E6272CB21c8240](https://sepolia.etherscan.io/address/0x65Ec786f35C0115B43746c42F9E6272CB21c8240)
+
+- TBillToken: [0x9fE172E52DE50fb7e679F3Cd414CBc9EBB0d0f0a](https://sepolia.etherscan.io/address/0x9fE172E52DE50fb7e679F3Cd414CBc9EBB0d0f0a)
+
+- MockTBillCustodian: [0x6379E009F03d23EB7C112b37BE3D3091443EF658](https://sepolia.etherscan.io/address/0x6379E009F03d23EB7C112b37BE3D3091443EF658)
+
+- TBillVault: [0xc03269E698A8A912ca177963b82ce1003fa7A46e](https://sepolia.etherscan.io/address/0xc03269E698A8A912ca177963b82ce1003fa7A46e)
+
+- RedemptionQueue: [0x91a34307800Cf71999E4286071af048C21890A37](https://sepolia.etherscan.io/address/0x91a34307800Cf71999E4286071af048C21890A37)
