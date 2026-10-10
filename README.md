@@ -223,6 +223,39 @@ What the zip must contain:
 The discussion prompts live in `STUDENT-QUESTIONS.md` — one per plank, no standard answers, and the
 real point of this lab.
 
+## Architecture — the four planks
+
+```mermaid
+flowchart TB
+    Investor["Investor"]
+    Vault["TBillVault"]
+    Token["TBillToken · tBILL shares"]
+    SPV["SPV / real T-Bills · off-chain"]
+    Custodian["(a) MockTBillCustodian · reported holdings"]
+    Reporter["NAV reporter"]
+    Feed["(b) MockPriceFeed · NAV"]
+    Queue["(c) RedemptionQueue · T+1"]
+    Compliance["(d) ComplianceRegistry · whitelist"]
+
+    Investor -->|"USDC subscription"| Vault
+    Vault -->|"mint"| Token
+    Token -->|"tBILL shares"| Investor
+
+    Vault -->|"invest USDC"| Custodian
+    SPV -.->|"reports holdings; not on-chain proof"| Custodian
+
+    Reporter -->|"attest"| Vault
+    Vault -->|"update NAV"| Feed
+    Feed -->|"NAV for pricing"| Vault
+
+    Token -->|"check sender and receiver"| Compliance
+    Investor -->|"tBILL shares for redemption"| Queue
+    SPV -.->|"sale proceeds via operator"| Vault
+    Vault -->|"USDC for settlement"| Queue
+    Queue -->|"claim USDC"| Investor
+```
+
+
 ## Deployment (Sepolia)
 
 Deployed on Ethereum Sepolia (chain ID 11155111).
